@@ -1,0 +1,495 @@
+package NewjframePackage;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
+
+public class NewLogin extends javax.swing.JFrame {
+
+    /**
+     * Creates new form NewSignUp
+     */
+    public NewLogin() {
+        initComponents();
+    }
+
+    //Validation
+    public boolean validateLogin() {
+        String name = txt_name1.getText();
+        String password = new String(txt_password.getPassword());
+        if (name.equals("")) {
+            JOptionPane.showMessageDialog(this, "Please Enter Name");
+            return false;
+        }
+        if (password.equals("")) {
+            JOptionPane.showMessageDialog(this, "Please Enter Password");
+            return false;
+        }
+        return true;
+    }
+
+    //verify user credentials
+    public static String capitalizeFirstLetterOnly(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+    public void userlogin() {
+        String name = capitalizeFirstLetterOnly(txt_name1.getText());
+        String password = new String(txt_password.getPassword());
+        try {
+            Connection con = NewjframePackage.DBConnection.getConnection();
+            PreparedStatement pst = con.prepareStatement("select * from users where name = ? and password = ?");
+            pst.setString(1, name);
+            pst.setString(2, password);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                JOptionPane.showMessageDialog(this, "User LogIn Sucessful!");
+                BookRequest Req = new BookRequest();
+                Req.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Incorrect Username or password");
+            }
+        } catch (SQLException e) {
+            e.getMessage();
+        }
+    }
+
+    //verify admin credentials
+    public void adminlogin() {
+
+        String name = txt_name1.getText();
+        String password = new String(txt_password.getPassword());
+        try {
+            Connection con = NewjframePackage.DBConnection.getConnection();
+            PreparedStatement pst = con.prepareStatement("select * from admin where name = ? and password = ?");
+            pst.setString(1, name);
+            pst.setString(2, password);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                JOptionPane.showMessageDialog(this, "Admin LogIn Sucessful!");
+                HomePage home = new HomePage();
+                home.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Incorrect Username or password");
+            }
+        } catch (SQLException e) {
+            e.getMessage();
+        }
+    }
+
+    // check user who forgetting the password exits or not 
+    public void verifyUser() {
+        String name = txt_name1.getText();
+        if (name.equals("")) {
+            JOptionPane.showMessageDialog(this, "Please Enter Name to Reset the password");
+            return;
+        }
+        try {
+            Connection con = NewjframePackage.DBConnection.getConnection();
+            PreparedStatement pst = con.prepareStatement("select * from users where name = ?");
+            pst.setString(1, name);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                // Create and show a message dialog
+                JOptionPane optionPane = new JOptionPane("Redirecting.....", JOptionPane.INFORMATION_MESSAGE);
+                JDialog dialog = optionPane.createDialog(this, "Message");
+
+                // Create a Timer to close the dialog after 1.2 seconds
+                Timer timer = new Timer(1200, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dialog.setVisible(false);
+                        dialog.dispose();
+                    }
+                });
+                timer.setRepeats(false); // Only execute once
+
+                // Start the timer and show the dialog
+                timer.start();
+                dialog.setVisible(true);
+
+                ForgotPassword fp = new ForgotPassword();
+                fp.setVisible(true);
+                dispose();
+
+            } else {
+                JOptionPane.showMessageDialog(this, "User does not Exists");
+            }
+        } catch (SQLException e) {
+            e.getMessage();
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        txt_name1 = new app.bolivia.swing.JCTextField();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        rSMaterialButtonCircle1 = new necesario.RSMaterialButtonCircle();
+        rSMaterialButtonCircle2 = new necesario.RSMaterialButtonCircle();
+        jLabel10 = new javax.swing.JLabel();
+        lbl_extra = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
+        txt_password = new javax.swing.JPasswordField();
+        jLabel35 = new javax.swing.JLabel();
+        rSMaterialButtonCircle3 = new necesario.RSMaterialButtonCircle();
+        jLabel36 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        label4 = new java.awt.Label();
+        label1 = new java.awt.Label();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setUndecorated(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setBackground(new java.awt.Color(102, 51, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        txt_name1.setBackground(new java.awt.Color(102, 51, 255));
+        txt_name1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
+        txt_name1.setDisabledTextColor(new java.awt.Color(255, 255, 255));
+        txt_name1.setFont(new java.awt.Font("Yu Gothic UI", 1, 14)); // NOI18N
+        txt_name1.setPlaceholder("Enter Your Name....");
+        txt_name1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txt_name1FocusLost(evt);
+            }
+        });
+        txt_name1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_name1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txt_name1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 230, 240, 40));
+
+        jLabel13.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel13.setFont(new java.awt.Font("Copperplate Gothic Bold", 0, 36)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel13.setText("login page");
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 70, 260, 30));
+
+        jLabel8.setFont(new java.awt.Font("Copperplate Gothic Bold", 0, 18)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("welcome, login to your account");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 340, 20));
+
+        jLabel32.setFont(new java.awt.Font("Copperplate Gothic Bold", 0, 14)); // NOI18N
+        jLabel32.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel32.setIcon(new javax.swing.ImageIcon(getClass().getResource("/NewjframePackage/icons8_Account_50px.png"))); // NOI18N
+        jLabel32.setMaximumSize(new java.awt.Dimension(30, 30));
+        jPanel1.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 220, 40, 60));
+
+        jLabel12.setFont(new java.awt.Font("Copperplate Gothic Bold", 0, 14)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/NewjframePackage/forgot-password (4).png"))); // NOI18N
+        jLabel12.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel12.setMaximumSize(new java.awt.Dimension(30, 30));
+        jLabel12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel12MouseClicked(evt);
+            }
+        });
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 476, 40, 40));
+
+        jLabel11.setFont(new java.awt.Font("Yu Gothic UI", 1, 14)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText("Password");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 310, 80, 20));
+
+        rSMaterialButtonCircle1.setBackground(new java.awt.Color(0, 0, 204));
+        rSMaterialButtonCircle1.setText("LOG IN AS USER");
+        rSMaterialButtonCircle1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSMaterialButtonCircle1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(rSMaterialButtonCircle1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 420, 300, 50));
+
+        rSMaterialButtonCircle2.setBackground(new java.awt.Color(204, 0, 0));
+        rSMaterialButtonCircle2.setText("SIGN up");
+        rSMaterialButtonCircle2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSMaterialButtonCircle2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(rSMaterialButtonCircle2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 640, 300, 50));
+
+        jLabel10.setBackground(new java.awt.Color(153, 153, 153));
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel10.setText("X");
+        jLabel10.setAlignmentY(0.2F);
+        jLabel10.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel10MouseClicked(evt);
+            }
+        });
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 0, 40, 30));
+
+        lbl_extra.setFont(new java.awt.Font("Yu Gothic UI", 0, 14)); // NOI18N
+        lbl_extra.setForeground(new java.awt.Color(58, 56, 56));
+        lbl_extra.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbl_extra.setText("Enter Your Password...");
+        lbl_extra.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        lbl_extra.setIconTextGap(10);
+        jPanel1.add(lbl_extra, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 340, 150, 30));
+
+        jLabel33.setFont(new java.awt.Font("Yu Gothic UI", 1, 14)); // NOI18N
+        jLabel33.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel33.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel33.setText("Don't have an Account?, Signup.");
+        jPanel1.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 690, 220, 20));
+
+        txt_password.setBackground(new java.awt.Color(102, 51, 255));
+        txt_password.setFont(new java.awt.Font("Yu Gothic UI", 0, 14)); // NOI18N
+        txt_password.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
+        txt_password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_passwordKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txt_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 340, 240, 30));
+
+        jLabel35.setFont(new java.awt.Font("Yu Gothic UI", 1, 15)); // NOI18N
+        jLabel35.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel35.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel35.setText("Forgot Password ?");
+        jLabel35.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel35.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel35MouseClicked(evt);
+            }
+        });
+        jPanel1.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 470, 130, 50));
+
+        rSMaterialButtonCircle3.setBackground(new java.awt.Color(0, 204, 0));
+        rSMaterialButtonCircle3.setBorder(null);
+        rSMaterialButtonCircle3.setText("LOG IN AS ADMIN");
+        rSMaterialButtonCircle3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSMaterialButtonCircle3ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(rSMaterialButtonCircle3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 550, 300, 50));
+
+        jLabel36.setFont(new java.awt.Font("Yu Gothic UI", 1, 14)); // NOI18N
+        jLabel36.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel36.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel36.setText("Name");
+        jPanel1.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, 60, 20));
+
+        jLabel14.setFont(new java.awt.Font("Copperplate Gothic Bold", 0, 14)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/NewjframePackage/icons8_Secure_50px.png"))); // NOI18N
+        jLabel14.setMaximumSize(new java.awt.Dimension(30, 30));
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 320, 50, 50));
+
+        jPanel4.setBackground(new java.awt.Color(51, 51, 51));
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 4, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 730, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 4, 730));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 0, 420, 730));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/NewjframePackage/library-3.png.png"))); // NOI18N
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 790, 600));
+
+        label4.setAlignment(java.awt.Label.CENTER);
+        label4.setBackground(new java.awt.Color(255, 255, 153));
+        label4.setFont(new java.awt.Font("Serif", 1, 27)); // NOI18N
+        label4.setForeground(new java.awt.Color(255, 51, 51));
+        label4.setText("WELCOME TO ");
+        jPanel2.add(label4, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 10, -1, 40));
+
+        label1.setBackground(new java.awt.Color(255, 255, 153));
+        label1.setFont(new java.awt.Font("Serif", 1, 36)); // NOI18N
+        label1.setForeground(new java.awt.Color(102, 51, 255));
+        label1.setText("LIBRARY MANAGEMENT SYSTEM ");
+        jPanel2.add(label1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 50, 610, 40));
+
+        jTextField1.setEditable(false);
+        jTextField1.setBackground(new java.awt.Color(255, 255, 153));
+        jTextField1.setFont(new java.awt.Font("Impact", 1, 48)); // NOI18N
+        jTextField1.setForeground(new java.awt.Color(51, 51, 51));
+        jTextField1.setBorder(null);
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 790, 126));
+
+        jTextField2.setBackground(new java.awt.Color(255, 255, 255));
+        jTextField2.setFont(new java.awt.Font("Impact", 1, 60)); // NOI18N
+        jTextField2.setForeground(new java.awt.Color(51, 51, 51));
+        jTextField2.setText("__________________________________________________________________________________________________________________________________________________________________________________");
+        jTextField2.setBorder(null);
+        jPanel2.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 14, 800, 170));
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 790, 730));
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void txt_name1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_name1FocusLost
+
+    }//GEN-LAST:event_txt_name1FocusLost
+
+    private void txt_name1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_name1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_name1ActionPerformed
+
+    private void rSMaterialButtonCircle1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonCircle1ActionPerformed
+        if (validateLogin()) {
+            userlogin();
+        }
+
+    }//GEN-LAST:event_rSMaterialButtonCircle1ActionPerformed
+
+    private void rSMaterialButtonCircle2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonCircle2ActionPerformed
+        NewSignUp signup = new NewSignUp();
+        signup.setVisible(true);
+        dispose();
+
+    }//GEN-LAST:event_rSMaterialButtonCircle2ActionPerformed
+
+    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
+        System.exit(0);
+    }//GEN-LAST:event_jLabel10MouseClicked
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void txt_passwordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_passwordKeyTyped
+        lbl_extra.setText("");
+    }//GEN-LAST:event_txt_passwordKeyTyped
+
+    private void rSMaterialButtonCircle3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonCircle3ActionPerformed
+        if (validateLogin()) {
+            adminlogin();
+        }
+    }//GEN-LAST:event_rSMaterialButtonCircle3ActionPerformed
+
+    private void jLabel35MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel35MouseClicked
+        verifyUser();
+    }//GEN-LAST:event_jLabel35MouseClicked
+
+    private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseClicked
+        verifyUser();
+    }//GEN-LAST:event_jLabel12MouseClicked
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(NewLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(NewLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(NewLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(NewLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new NewLogin().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private java.awt.Label label1;
+    private java.awt.Label label4;
+    private javax.swing.JLabel lbl_extra;
+    private necesario.RSMaterialButtonCircle rSMaterialButtonCircle1;
+    private necesario.RSMaterialButtonCircle rSMaterialButtonCircle2;
+    private necesario.RSMaterialButtonCircle rSMaterialButtonCircle3;
+    private app.bolivia.swing.JCTextField txt_name1;
+    private javax.swing.JPasswordField txt_password;
+    // End of variables declaration//GEN-END:variables
+}
